@@ -2,8 +2,8 @@ version: '3'
 services:
   fastapi:
     build: .
-    # volumes:
-    #   - $HOME/Documents:$HOME/Documents
+    volumes:
+      - $HOME:$HOME
     network_mode: "host"
     container_name: todo_container
     image: todo_image
