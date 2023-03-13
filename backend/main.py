@@ -3,8 +3,9 @@ from apis.type import get_type, get_type_by_name
 import uvicorn
 from fastapi import Depends, FastAPI,HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from utils.models import Type
 from request_body.taskbody import TaskBody
-from utils.database import get_db
+from utils.database import create_table, get_db
 from sqlalchemy.orm import Session
 from apis.type import get_type
 from apis.task import create_task, delete_task_by_id,\
@@ -235,6 +236,58 @@ def get_task_count_func(db: Session = Depends(get_db)):
         "success":True,
         "count": res,
     }
+
+@app.post("/types/populate")
+def create_type_func(db: Session = Depends(get_db)):
+    """
+        Create all types
+
+        ### Parameters
+
+        ### Return 
+        Json object
+        
+        **Output Example**
+        ```
+        {
+        "success": true
+        }
+        ```
+    """
+    res = db.query(Type)
+    if not res:
+        type1,type2,type3 = Type(name="To-Do"),Type(name="In-Progress"),Type(name="Done")
+        db.add(type1)
+        db.add(type2)
+        db.add(type3)
+        db.commit()
+    return {
+        "success":True,
+    }
+
+@app.post("/tables")
+def create_table_func(db: Session = Depends(get_db)):
+    """
+        Create all types
+
+        ### Parameters
+
+        ### Return 
+        Json object
+        
+        **Output Example**
+        ```
+        {
+        "success": true
+        }
+        ```
+    """
+    create_table()
+    db.commit()
+    return {
+        "success":True,
+    }
+
 
 if __name__ == "__main__":
 
