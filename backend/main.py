@@ -254,9 +254,11 @@ def create_type_func(db: Session = Depends(get_db)):
         }
         ```
     """
-    res = db.query(Type)
+    res = db.query(Type).count()
+    if res != 0:
+        return {"res":res}
     if not res:
-        type1,type2,type3 = Type(name="To-Do"),Type(name="In-Progress"),Type(name="Done")
+        type1,type2,type3 = Type(id=1,name="To-Do"),Type(id=2,name="In-Progress"),Type(id=3,name="Done")
         db.add(type1)
         db.add(type2)
         db.add(type3)
