@@ -1,0 +1,12 @@
+version: '3'
+services:
+  fastapi:
+    build: .
+    # volumes:
+    #   - $HOME/Documents:$HOME/Documents
+    network_mode: "host"
+    container_name: todo_container
+    image: todo_image
+    environment:
+      - APP_ENV="deployment"
+    command: ["python", "main.py"]
