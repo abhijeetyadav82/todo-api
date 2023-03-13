@@ -1,5 +1,0 @@
-INCORRECT_PASSWORD_ERROR = "Email Id or password you entered is incorrect"
-NOUSER_ERROR = "User doesn\'t exist"
-INACTIVE_USER_ERROR =  "User not Active, please contact Admin at info@switchon.io"
-INVALID_TOKEN = "Authorization failed. Invalid Token"
-BUCKET_ACCESS_NOT_FOUND = "No bucket access found"
