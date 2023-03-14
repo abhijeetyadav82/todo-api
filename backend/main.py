@@ -3,7 +3,7 @@ from apis.type import get_type, get_type_by_name
 import uvicorn
 from fastapi import Depends, FastAPI,HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from utils.models import Type
+from utils.models import Task, Type
 from request_body.taskbody import TaskBody
 from utils.database import create_table, get_db
 from sqlalchemy.orm import Session
@@ -238,7 +238,7 @@ def get_task_count_func(db: Session = Depends(get_db)):
     }
 
 @app.post("/types/populate")
-def create_type_func(db: Session = Depends(get_db)):
+def populate_type_func(db: Session = Depends(get_db)):
     """
         Create all types
 
@@ -257,12 +257,47 @@ def create_type_func(db: Session = Depends(get_db)):
     res = db.query(Type).count()
     if res != 0:
         return {"res":res}
-    if not res:
+    else:
         type1,type2,type3 = Type(id=1,name="To-Do"),Type(id=2,name="In-Progress"),Type(id=3,name="Done")
         db.add(type1)
         db.add(type2)
         db.add(type3)
         db.commit()
+    return {
+        "success":True,
+    }
+
+@app.post("/tasks/populate")
+def populate_task_func(db: Session = Depends(get_db)):
+    """
+        Create all types
+
+        ### Parameters
+
+        ### Return 
+        Json object
+        
+        **Output Example**
+        ```
+        {
+        "success": true
+        }
+        ```
+    """
+    res = db.query(Task).count()
+    if res != 0:
+        return {"res":res}
+    else:
+        res = create_task(db,TaskBody(name="Groceries",description="get groceries from the market",type=1))
+        res = create_task(db,TaskBody(name="Cleaning",description="Clean the room",type=1))
+        res = create_task(db,TaskBody(name="Cinema",description="Go to the cinema hall to watch a movie",type=1))
+        res = create_task(db,TaskBody(name="Assignment",description="Submit the due assignment",type=2))
+        res = create_task(db,TaskBody(name="Blog Post",description="Write a blog post",type=2))
+        res = create_task(db,TaskBody(name="Repair Laptop",description="Get the laptop repaired",type=2))
+        res = create_task(db,TaskBody(name="Water the plants",description="Water the plants",type=3))
+        res = create_task(db,TaskBody(name="Karate Class",description="Attend the Karate class",type=3))
+        res = create_task(db,TaskBody(name="Develop New Feature",description="Develop the new feature for the application",type=3))
+        
     return {
         "success":True,
     }
